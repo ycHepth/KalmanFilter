@@ -23,6 +23,8 @@ static float q_bias , angle_err , PCt_0 , PCt_1 , E , K_0 , K_1 , t_0 , t_1;
    P    角度协方差矩阵
    Pdot 角速度协方差矩阵
    dt   微分因子
+   q_bias 陀螺仪偏移量
+   
    void kalman_fliter(float angle_m, float gyro_m, float *angle_f , *angle_dot_f)
 */
 
