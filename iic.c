@@ -2,7 +2,7 @@
 #include "stm32f10x_i2c.h"
 #include "iic.h"
 #include <stdio.h>
-
+//硬件IIC，虚拟IIC应该更合适
 void iic_init(void)
 {
   I2C_InitTypeDef I2C_InitStructure;
