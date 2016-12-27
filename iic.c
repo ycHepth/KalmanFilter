@@ -32,5 +32,47 @@ void iic_init(void)
 
 void iic_rw(u8 *DataBuff,u8 ByteQuantity,u8 RefAddress,u8 SlaveAddress,u8 ControlByte)
 {
+	u8 errorflag = 1;
+	u8 j;
+	u8 i = 1;
+	while (i--)
+	{
+		I2C_GenerataSTART(I2C2, ENABLE);
+		while (!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));
 
+		I2C_Send7bitAddress(I2C2, SlaveAddress, I2C_Direction_Transmitter);
+		while (!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+
+		I2C_SendData(I2C2, RegAddress);
+		while (!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+		if (ControlByte == 0)
+		{
+			j = ByteQuantity;
+			errorflag = 0;
+			while (j--) {
+				I2C_SendData(I2C2, *DataBuff++);
+				while (!(I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED) | I2C_SR1_AF));
+			}
+			I2C_GenerateSTOP(I2C2, ENABLE);
+		}
+		else {
+			I2C_GenerateSTART(I2C2, ENABLE);
+			while (!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));
+			I2C_Send7bitAddress(I2C2, SlaveAddress, I2C_Direction_Receiver);
+			while (!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED);
+			while (ByteQuantity)
+			{
+				if (ByteQuantity == 1)
+				{
+					I2C_AcknowledheConfig(I2C2, DISABLE);
+					I2C_GenerateSTOP(I2C2, ENABLE);
+				}
+				while (!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_RECEIVED));
+				*DataBuff = I2C_ReceiveData(I2C2);
+				DataBuff++;
+				ByteQuantity--;
+			}
+			I2C_AcknowledheConfig(I2C2, ENABLE);
+		}
+	}
 }
