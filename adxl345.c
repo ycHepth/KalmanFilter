@@ -2,7 +2,7 @@
 #include "adxl345.h"
 #include "iic.h"
 #include <stdio.h>
-#define ADXL345_ADDR       0xa6  //S0=0Ê±µØÖ·
+#define ADXL345_ADDR       0xa6  
 #define ADXL345_ID         0xf5
 #define ADXL345_ID_ADDR    0x00	 
 #define BW_RATE            0x2c  
